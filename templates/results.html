@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLAST result</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">BLAST结果</h1>
+        <p class="lead text-left"><strong>任务ID：{{ task.taskname }}</strong></p>
+        <p class="lead text-left"><strong>程序：{{ task.program }}</strong></p>
+        <p class="lead text-left"><strong>数据库：{{ task.database }}</strong></p>
+        <p class="lead text-left"><strong>序列：</strong></p><p>{{ task.sequence }}</p>
+        <div class="text-right mb-4">
+            <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-danger">删除任务</button>
+            </form>
+            <a href="{{ url_for('user_index', username=current_user.username) }}" class="btn btn-primary">返回个人主页</a>
+        </div>
+
+        {% if results %}
+            <div class="result-list">
+                {% for result in results %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <p><strong>Hit:</strong> {{ result.title }}</p>
+                            <p><strong>长度:</strong> {{ result.length }}</p>
+                            <p><strong>分数:</strong> {{ result.score }}</p>
+                            <p><strong>E值:</strong> {{ result.e_value }}</p>
+                            <p><strong>查询起始:</strong> {{ result.query_start }}</p>
+                            <p><strong>查询结束:</strong> {{ result.query_end }}</p>
+                            <p><strong>查询序列:</strong></p>
+                            <pre class="bg-light p-2">{{ result.qseq }}</pre>
+                            <p><strong>Match:</strong></p>
+                            <pre class="bg-light p-2">{{ result.match }}</pre>
+                            <p><strong>目标序列:</strong></p>
+                            <pre class="bg-light p-2">{{ result.hseq }}</pre>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                没有结果返回。
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
