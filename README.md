@@ -1,1 +1,1 @@
-基于flask、biopython的在线blast工具
+基于flask、biopython的在线blast工具网页demo
